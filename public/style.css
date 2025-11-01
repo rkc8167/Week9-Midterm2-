@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#recordControls {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);  /* Only center horizontally */
+    z-index: 100;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+#recordControls h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #25422e;
+}
+
+#recordBtn {
+    padding: 12px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    background: #7cb89d;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+#recordBtn:hover {
+    background: #5a9c7f;
+    transform: translateY(-2px);
+}
