@@ -12,12 +12,26 @@ let server = http.createServer(app);
 // this starts the server for socket.io
 const { Server } = require('socket.io');
 const io = new Server(server);
+
 // start the server and listens for new connections and disconnections
 io.on('connection', (socket) => {
     console.log('We have a new client: ' + socket.id);
-    // listen for a disconnect event
+    
+    // Listen for new flower creation from clients
+    socket.on('newFlower', (flowerData) => {
+        console.log('Received flower from', socket.id);
+        console.log('Flower data:', flowerData);
+        
+        // Broadcast this flower to ALL clients (including sender)
+        io.emit('flowerBroadcast', flowerData);
+    });
+    
+    // Listen for disconnect event
     socket.on('disconnect', () => {
         console.log('Client disconnected: ' + socket.id);
+        
+        // Notify all clients that this user disconnected
+        io.emit('userDisconnected', socket.id);
     });
 });
 // Start the HTTP server (not app.listen anymore!)
