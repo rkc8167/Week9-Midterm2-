@@ -32,6 +32,12 @@ io.on('connection', (socket) => {
         
         // Notify all clients that this user disconnected
         io.emit('userDisconnected', socket.id);
+        
+        // Listen for audio activity updates
+    socket.on('audioActivity', (audioData) => {
+        // Broadcast to all other clients (not sender)
+        socket.broadcast.emit('audioActivityBroadcast', audioData);
+    });
     });
 });
 // Start the HTTP server (not app.listen anymore!)
