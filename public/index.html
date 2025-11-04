@@ -21,24 +21,64 @@
                 <p>Love can fade leaving us to question what the fuzz was all about.</p>
                 <p class="emphasis">Was it love?</p>
             </div>
-            <div class="initial-question">
-                <p>Think of love (or any of its manifestations) in your life.</p>
-                <p>This is a place where you can share and let go of those feelings, emotions, and thoughts that need to
-                    be acknowledged but you haven't found a way to set free.</p>
-                <p class="emphasis">This place has no memory. Everything you share here will dissolve and disappear.</p>
-            </div>
-            <button id="startBtn" class="main-btn">Start when you're ready</button>
+            <button id="startBtn" class="btn-primary">Start when you're ready</button>
+        </div>
+    </div>
+    <div id="initialQuestionScreen" class="screen">
+        <div class="content">
+            <p>Think of love (or any of its manifestations) in your life.</p>
+            <p>This is a place where you can calm your mind (and heart) through talking about it.</p>
+            <p class="emphasis">This place has no memory. Everything you share here will dissolve and disappear.</p>
+            <button id="toRecordBtn" class="btn-primary">I'll share</button>
         </div>
     </div>
     <!-- ----------------------------------------------------------------------- -->
-    <!--                     QUESTIONS AND RECORDING SCREEN                      -->
+    <!--                              RECORD PROMPT                              -->
+    <!-- ----------------------------------------------------------------------- -->
+    <div id="recordPromptScreen" class="screen">
+        <div class="content">
+            <p>The next set of questions can help you discover the nature of those feelings.</p>
+            <button id="recordBtn" class="btn-record">Record (never stored)</button>
+        </div>
+    </div>
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                                QUESTIONS                                -->
     <!-- ----------------------------------------------------------------------- -->
     <div id="questionScreen" class="screen">
-        <div class="content">
+        <div class="content" id="stageQuestion">
             <h2 id="stageTitle"></h2>
             <p id="questionText" class="question"></p>
-            <button id="recordBtn" class="record-btn">Record (not stored)</button>
-            <button id="nextBtn" class="next-btn hidden">Continue</button>
+        </div>
+        <div class="content" id="questionNavigation">
+            <button id="nextQuestionBtn" class="btn-circular">></button>
+        </div>
+    </div>
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                                  QUOTE                                  -->
+    <!-- ----------------------------------------------------------------------- -->
+    <div id="quoteScreen" class="screen">
+        <div class="content">
+            <blockquote>
+                <p>"I don't direct this thing, this attraction, to Emily. It directs me. I try desperately to argue with
+                    it, to limit its influence, to channel it (into sex, for example), to deny it, to enjoy it and, yes,
+                    dammit, to make her respond! Even though I know that Emily and I have absolutely no chance of making
+                    a life together, the thought of her is an obsession. I am in the position of passionately wanting
+                    someone I don't want at all and could find no use for if I had her."</p>
+                <cite>- Dorothy Tennov</cite>
+            </blockquote>
+            <p>Does this sound familiar? Maybe this description is closer to what you felt.</p>
+            <p class="emphasis">If so, you may have experienced limerence.</p>
+            <button id="afterQuoteBtn" class="btn-primary">Oh my!</button>
+        </div>
+    </div>
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                            FINAL REFLECTION                             -->
+    <!-- ----------------------------------------------------------------------- -->
+    <div id="finalScreen" class="screen">
+        <div class="content">
+            <p>But now that you've had the time to reflect, you can let go of the intensity of those feelings.</p>
+            <p class="emphasis">Now that you're lighter, you can move on.</p>
+            <button id="startOverBtn" class="btn-primary">Start Over</button>
         </div>
     </div>
     <!-- ----------------------------------------------------------------------- -->

@@ -1,21 +1,4 @@
 /* -------------------------------------------------------------------------- */
-/*                            FIREBASE CONFIGURATION                          */
-/* -------------------------------------------------------------------------- */
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyASYfPDFxWE-uJYeiEKkF6-iZkxSKdcb28",
-    authDomain: "whispered-love-letter.firebaseapp.com",
-    projectId: "whispered-love-letter",
-    storageBucket: "whispered-love-letter.firebasestorage.app",
-    messagingSenderId: "779331896401",
-    appId: "1:779331896401:web:8b286b293f91d826afa470"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-console.log('Firebase initialized');
-
-/* -------------------------------------------------------------------------- */
 /*                         APPLICATION STATE MANAGEMENT                       */
 /* -------------------------------------------------------------------------- */
 
@@ -68,10 +51,93 @@ let dataArray;
 let isRecording = false;
 
 /* -------------------------------------------------------------------------- */
+/*                          SOCKET.IO SETUP                                   */
+/* -------------------------------------------------------------------------- */
+const socket = io();
+
+// User identification (assigned by server)
+let userId = null;
+let userColor = null;
+
+// Listen for color assignment from server
+socket.on('assignColor', (data) => {
+    userId = data.userId;
+    userColor = data.color;
+    console.log('Assigned color:', userColor);
+    console.log('User ID:', userId);
+});
+
+// Listen for pixels from other users
+socket.on('pixelBroadcast', (pixelData) => {
+    // Add pixel from another user to our display
+    allPixelsFromDB.push({
+        x: pixelData.x,
+        y: pixelData.y,
+        color: pixelData.color,
+        size: pixelData.size,
+        userId: pixelData.userId
+    });
+    console.log('Received pixel from another user!');
+});
+
+/* -------------------------------------------------------------------------- */
 /*                            FERTILIZER SYSTEM                               */
 /* -------------------------------------------------------------------------- */
 let fertilizerMarks = []; // Stores all marks (local + from database)
 let backgroundImage; // Garden background
+
+/* -------------------------------------------------------------------------- */
+/*                          PIXEL PARTICLE SYSTEM                             */
+/* -------------------------------------------------------------------------- */
+let particles = []; // Active particles flying from soundwave
+let settledPixels = []; // Pixels that have settled (local session)
+let allPixelsFromDB = []; // All pixels from ALL users (real-time only)
+
+// Limits to keep it smooth
+const MAX_PIXELS_PER_USER = 150; // Limit per session
+const PARTICLE_SPAWN_RATE = 0.15; // Probability per frame when audio level is high
+let userPixelCount = 0; // Track current user's pixel count
+
+// Particle class - represents a flying pixel
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = p5.Vector.random2D().x * 2; // Random horizontal velocity
+        this.vy = p5.Vector.random2D().y * 2; // Random vertical velocity
+        this.color = userColor; // Use the user's assigned color
+        this.life = 1.0; // Full opacity
+        this.settled = false;
+        this.size = Math.random() * 3 + 2; // 2-5 pixels
+    }
+    
+    update() {
+        // Move particle
+        this.x += this.vx;
+        this.y += this.vy;
+        
+        // Slow down over time
+        this.vx *= 0.98;
+        this.vy *= 0.98;
+        
+        // Gravity effect
+        this.vy += 0.05;
+        
+        // Fade over time
+        this.life -= 0.01;
+        
+        // Check if settled (stopped moving much)
+        if (Math.abs(this.vx) < 0.1 && Math.abs(this.vy) < 0.1) {
+            this.settled = true;
+        }
+    }
+    
+    display(p) {
+        p.noStroke();
+        p.fill(this.color[0], this.color[1], this.color[2], this.life * 255);
+        p.circle(this.x, this.y, this.size);
+    }
+}
 
 /* -------------------------------------------------------------------------- */
 /*                              INITIALIZATION                                */
@@ -79,42 +145,61 @@ let backgroundImage; // Garden background
 
 window.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
+    console.log('App initialized, waiting for color assignment...');
 });
 
 function setupEventListeners() {
+    // Get all buttons
     const startBtn = document.getElementById('startBtn');
+    const toRecordBtn = document.getElementById('toRecordBtn');
     const recordBtn = document.getElementById('recordBtn');
-    const nextBtn = document.getElementById('nextBtn');
+    const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+    const afterQuoteBtn = document.getElementById('afterQuoteBtn');
+    const startOverBtn = document.getElementById('startOverBtn');
     
-    if (!startBtn) {
-        console.error('❌ Start button not found!');
-        return;
-    }
-    if (!recordBtn) {
-        console.error('❌ Record button not found!');
-        return;
-    }
-    if (!nextBtn) {
-        console.error('❌ Next button not found!');
-        return;
+    // Attach event listeners
+    if (startBtn) {
+        startBtn.addEventListener('click', () => {
+            switchScreen('welcome', 'initialQuestion');
+        });
     }
     
-    startBtn.addEventListener('click', () => {
-        console.log('🔘 Start button clicked!');
-        startInterview();
-    });
+    if (toRecordBtn) {
+        toRecordBtn.addEventListener('click', () => {
+            switchScreen('initialQuestion', 'recordPrompt');
+        });
+    }
     
-    recordBtn.addEventListener('click', () => {
-        console.log('🔘 Record button clicked!');
-        toggleRecording();
-    });
+    if (recordBtn) {
+        recordBtn.addEventListener('click', () => {
+            startRecording();
+            switchScreen('recordPrompt', 'question');
+            // Show garden and start questions
+            document.getElementById('gardenScreen').style.display = 'block';
+            initializeGarden();
+            loadQuestion();
+        });
+    }
     
-    nextBtn.addEventListener('click', () => {
-        console.log('🔘 Next button clicked!');
-        nextQuestion();
-    });
+    if (nextQuestionBtn) {
+        nextQuestionBtn.addEventListener('click', () => {
+            nextQuestion();
+        });
+    }
     
-    console.log('✅ All event listeners attached');
+    if (afterQuoteBtn) {
+        afterQuoteBtn.addEventListener('click', () => {
+            switchScreen('quote', 'final');
+        });
+    }
+    
+    if (startOverBtn) {
+        startOverBtn.addEventListener('click', () => {
+            location.reload(); // Simple restart
+        });
+    }
+    
+    console.log('All event listeners attached');
 }
 
 /* -------------------------------------------------------------------------- */
@@ -181,7 +266,7 @@ function loadQuestion() {
 
 function nextQuestion() {
     const currentStageData = interviewData.stages[currentStage];
-
+    
     // Check if there are more questions in current stage
     if (currentQuestionIndex < currentStageData.questions.length - 1) {
         // Move to next question in same stage
@@ -194,14 +279,20 @@ function nextQuestion() {
             currentStage++;
             currentQuestionIndex = 0;
             loadQuestion();
-
-            // Change background for new stage
             changeStageBackground();
         } else {
-            // All questions done
+            // All questions done - go to quote screen
             endInterview();
         }
     }
+}
+
+function endInterview() {
+    console.log('Interview complete!');
+    stopRecording();
+    
+    // Switch to quote screen
+    switchScreen('question', 'quote');
 }
 
 function changeStageBackground() {
@@ -210,14 +301,6 @@ function changeStageBackground() {
 
     currentBackgroundImage = backgroundImages[stageName];
     console.log(`Changed background to: ${stageName}`);
-}
-
-function endInterview() {
-    console.log('Interview complete!');
-    stopQuestionTimer();
-    stopRecording();
-
-    // TODO: Show final garden view with all users' marks
 }
 
 function toggleRecording() {
@@ -275,13 +358,16 @@ function stopRecording() {
     console.log('Stopping recording...');
     isRecording = false;
     
-    if (audioContext) {
+    // Only close if context exists and is not already closed
+    if (audioContext && audioContext.state !== 'closed') {
         audioContext.close();
+        console.log('AudioContext closed');
+    } else {
+        console.log('AudioContext already closed or does not exist');
     }
     
     console.log('Recording stopped.');
 }
-
 /* -------------------------------------------------------------------------- */
 /*                            AUDIO ANALYSIS                                  */
 /* -------------------------------------------------------------------------- */
@@ -327,7 +413,11 @@ function initializeGarden() {
             backgroundImages = {
                 infatuation: p.loadImage('/img/Infatuation.webp'),
                 crystallization: p.loadImage('/img/Crystallization.webp'),
-                deterioration: p.loadImage('/img/Deterioration.webp')
+                deterioration: p.loadImage('/img/Deterioration.webp'),
+                background1: p.loadImage('/img/Background_1.webp'),
+                background2: p.loadImage('/img/Background_2.webp'),
+                background3: p.loadImage('/img/Background_3.webp'),
+                imprintsBG: p.loadImage('/img/Imprints_Background.webp'),
             };
         };
 
@@ -348,10 +438,13 @@ function initializeGarden() {
                 p.image(currentBackgroundImage, 0, 0, p.width, p.height);
             }
 
-            // Draw fertilizer marks (we'll add this later)
-            drawFertilizerMarks(p);
+            // Draw all settled pixels from database (all users)
+            drawAllPixels(p);
 
-            // Draw soundwave if recording (we'll add this later)
+            // Update and draw active particles
+            updateAndDrawParticles(p);
+
+            // Draw soundwave if recording
             if (isRecording) {
                 drawSoundwave(p);
             }
@@ -370,8 +463,10 @@ function initializeGarden() {
 let backgroundImages = {};
 
 // Placeholder functions (we'll implement these next)
+
 function drawFertilizerMarks(p) {
-    // TODO: Draw fertilizer marks from array
+    // This is now handled by drawAllPixels() in p.draw()
+    // Keeping this for backwards compatibility
 }
 
 function drawSoundwave(p) {
@@ -403,7 +498,7 @@ function drawSoundwave(p) {
     const color = stageColors[currentStage];
     p.stroke(color[0], color[1], color[2], 200);
     
-    // Draw the waveform
+    // Draw the waveform and emit particles
     p.beginShape();
     
     const waveWidth = p.width * 0.6; // 60% of screen width
@@ -418,6 +513,13 @@ function drawSoundwave(p) {
         const y = p.map(audioValue, 0, 255, centerY - waveHeight/2, centerY + waveHeight/2);
         
         p.vertex(x, y);
+        
+        // Spawn particles from waveform when audio is active
+        if (level > 0.2 && Math.random() < PARTICLE_SPAWN_RATE && userPixelCount < MAX_PIXELS_PER_USER) {
+            // Use user's assigned color
+            const particle = new Particle(x, y);
+            particles.push(particle);
+        }
     }
     
     p.endShape();
@@ -432,25 +534,46 @@ function drawSoundwave(p) {
     p.pop();
 }
 
-/* -------------------------------------------------------------------------- */
-/*                               QUESTION TIMER                               */
-/* -------------------------------------------------------------------------- */
-
-function startQuestionTimer() {
-    // Clear any existing timer
-    if (questionTimer) {
-        clearInterval(questionTimer);
+function updateAndDrawParticles(p) {
+    // Update and draw active particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+        const particle = particles[i];
+        
+        particle.update();
+        particle.display(p);
+        
+        // If particle has settled, save it
+        if (particle.settled && userPixelCount < MAX_PIXELS_PER_USER) {
+            const settledPixel = {
+                x: particle.x,
+                y: particle.y,
+                color: particle.color,
+                size: particle.size
+            };
+            
+            // Add to local display
+            settledPixels.push(settledPixel);
+            allPixelsFromDB.push(settledPixel);
+            userPixelCount++;
+            
+            // Send to other users via Socket.io
+            socket.emit('newPixel', settledPixel);
+            
+            // Remove from active particles
+            particles.splice(i, 1);
+        }
+        // Remove if faded out
+        else if (particle.life <= 0) {
+            particles.splice(i, 1);
+        }
     }
-
-    // Advance to next question every 10 seconds
-    questionTimer = setInterval(() => {
-        nextQuestion();
-    }, questionInterval);
 }
 
-function stopQuestionTimer() {
-    if (questionTimer) {
-        clearInterval(questionTimer);
-        questionTimer = null;
+function drawAllPixels(p) {
+    // Draw all pixels from database (accumulated from all users)
+    p.noStroke();
+    for (let pixel of allPixelsFromDB) {
+        p.fill(pixel.color[0], pixel.color[1], pixel.color[2], 180);
+        p.circle(pixel.x, pixel.y, pixel.size);
     }
 }
