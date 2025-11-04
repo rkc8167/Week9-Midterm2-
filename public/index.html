@@ -4,24 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 9 - Project 02</title>
+    <title>Whispered Love Letter</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <!-- ----------------------------------------------------------------------- -->
-    <!--                                CONTROLS                                 -->
+    <!--                             WELCOME SCREEN                              -->
     <!-- ----------------------------------------------------------------------- -->
-    <div id="recordControls">
-        <h3>Start recording</h3>
-        <button id="recordBtn">Send</button>
+    <div id="welcomeScreen" class="screen active">
+        <div class="content">
+            <h1>Whispered Love Letter</h1>
+            <div class="instructions">
+                <p>Love can manifest in our lives without us having a say in this.</p>
+                <p>Love can linger and overstay its welcome.</p>
+                <p>Love can fade leaving us to question what the fuzz was all about.</p>
+                <p class="emphasis">Was it love?</p>
+            </div>
+            <div class="initial-question">
+                <p>Think of love (or any of its manifestations) in your life.</p>
+                <p>This is a place where you can share and let go of those feelings, emotions, and thoughts that need to
+                    be acknowledged but you haven't found a way to set free.</p>
+                <p class="emphasis">This place has no memory. Everything you share here will dissolve and disappear.</p>
+            </div>
+            <button id="startBtn" class="main-btn">Start when you're ready</button>
+        </div>
     </div>
     <!-- ----------------------------------------------------------------------- -->
-    <!--                                LIBRARIES                                -->
+    <!--                     QUESTIONS AND RECORDING SCREEN                      -->
     <!-- ----------------------------------------------------------------------- -->
-    <script src="https://q5js.org/q5.js"></script>
-    <script src="https://p5play.org/v3/planck.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5play/3.33.5/p5play.min.js"></script>
+    <div id="questionScreen" class="screen">
+        <div class="content">
+            <h2 id="stageTitle"></h2>
+            <p id="questionText" class="question"></p>
+            <button id="recordBtn" class="record-btn">Record (not stored)</button>
+            <button id="nextBtn" class="next-btn hidden">Continue</button>
+        </div>
+    </div>
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                              GARDEN SCREEN                              -->
+    <!-- ----------------------------------------------------------------------- -->
+    <div id="gardenScreen">
+        <!-- p5.js canvas will be inserted here -->
+    </div>
+    <!-- ------------------------------ LIBRARIES ------------------------------ -->
+    <!-- CLAUDE recommended to use firebase as a database for our app -->
+    <!-- Firebase SDK (compat version - works with script tags) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.0/p5.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="app.js"></script>
 </body>

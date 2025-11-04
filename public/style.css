@@ -1,41 +1,140 @@
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  background: #f5f3ed;
+  color: #3a3a3a;
+  overflow-x: hidden;
   height: 100vh;
 }
 
-#recordControls {
-    position: fixed;
-    top: 100px;
-    left: 50%;
-    transform: translateX(-50%);  /* Only center horizontally */
-    z-index: 100;
-    
+/* ---------------------------- Screen Management --------------------------- */
+
+.screen {
+    display: none;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    transition: opacity 0.5s ease;
+    opacity: 1;  /* ADD THIS */
+}
+
+.screen.active {
+    display: flex;
+}
+
+.content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    max-width: 700px;
+    text-align: center;
 }
 
-#recordControls h3 {
-    margin: 0;
-    font-size: 18px;
-    color: #25422e;
+#welcomeScreen {
+    position: relative;
+    z-index: 100; /* Above everything */
 }
 
-#recordBtn {
-    padding: 12px 30px;
-    font-size: 16px;
+/* ------------------------------- Typography ------------------------------- */
+
+h1 {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    color: #5a7c65;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #5a7c65;
+}
+
+p {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.emphasis {
+    font-style: italic;
+    font-weight: bold;
+    margin-top: 2rem;
+}
+
+.instructions, .initial-question {
+    margin: 2rem 0;
+}
+
+.question {
+    font-size: 1.5rem;
+    font-style: italic;
+    margin: 2rem 0;
+}
+
+/* ---------------------------- Button Styling ----------------------------- */
+
+button {
+    font-size: 1.2rem;
+    padding: 15px 40px;
+    margin-top: 2rem;
+    border: 2px solid #5a7c65;
+    background: #f5f3ed;
+    color: #5a7c65;
     cursor: pointer;
-    background: #7cb89d;
-    color: white;
-    border: none;
-    border-radius: 25px;
     transition: all 0.3s ease;
+    border-radius: 5px;
 }
 
-#recordBtn:hover {
-    background: #5a9c7f;
-    transform: translateY(-2px);
+button:hover {
+    background: #5a7c65;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ----------------------------- Recording State ---------------------------- */
+
+.recording {
+    background: #d88;
+    border-color: #d88;
+    color: white;
+}
+
+---------------------------- p5.js Canvas ----------------------------
+
+canvas {
+    display: block;
+}
+
+/* Question screen overlay (sits on top of garden canvas) */
+#questionScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allow clicks to pass through */
+    z-index: 10; /* Above canvas */
+}
+
+#questionScreen .content {
+    pointer-events: all; /* But allow clicking on content */
+    padding: 40px;
+}
+
+#questionScreen button {
+    pointer-events: all; /* Make buttons clickable */
+}
+
+/* Garden screen sits behind */
+#gardenScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Behind question overlay */
 }
