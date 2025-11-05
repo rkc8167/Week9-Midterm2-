@@ -145,6 +145,11 @@ p {
 }
 /* Button Styling */
 
+/* Apply Times New Roman to all buttons */
+button {
+    font-family: "Times New Roman", Times, serif;
+}
+
 /* Primary buttons */
 .btn-primary {
     font-size: 1.2rem;
