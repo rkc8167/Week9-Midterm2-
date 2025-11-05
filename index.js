@@ -1,12 +1,10 @@
-/* -------------------------------------------------------------------------- */
-/*                            SET UP EXPRESS SERVER                           */
-/* -------------------------------------------------------------------------- */
+/* Setting Up Express Server */
 let express = require('express');
 let app = express();
 let PORT = process.env.PORT || 3000;
 // use the files on the public folder - my index.html is there
 app.use(express.static('public'));
-// the http thing needs to be a server for socket.io (not sure what this means)
+// this creates http server using express which is necessary for socket.io functionality 
 let http = require('http');
 let server = http.createServer(app);
 // this starts the server for socket.io
@@ -17,7 +15,7 @@ const io = new Server(server);
 io.on('connection', (socket) => {
     console.log('We have a new client: ' + socket.id);
     
-    // Assign user a random color when they connect
+    // assigns a random color to a user when they connect 
     const userColorPalette = [
         [90, 124, 101],   // Deep sage green
         [139, 169, 137],  // Soft leaf green
@@ -35,12 +33,12 @@ io.on('connection', (socket) => {
     
     const userColor = userColorPalette[Math.floor(Math.random() * userColorPalette.length)];
     
-    // Send the user their assigned color
+    // sends the user their assigned color
     socket.emit('assignColor', { color: userColor, userId: socket.id });
     
     console.log('Assigned color to', socket.id, ':', userColor);
     
-    // Listen for new pixels from this user
+    // listens for new pixels from this user and broadcasts to other users except the sender 
     socket.on('newPixel', (pixelData) => {
         // Broadcast this pixel to ALL other clients (not sender)
         socket.broadcast.emit('pixelBroadcast', {
@@ -49,13 +47,13 @@ io.on('connection', (socket) => {
         });
     });
     
-    // Listen for disconnect event
+    // listen when a client disconnects and logs their socket.id
     socket.on('disconnect', () => {
         console.log('Client disconnected: ' + socket.id);
     });
 });
 
-// Start the HTTP server (not app.listen anymore!)
+// starts the http server (not app.listen anymore!), instead on a defined port 
 server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
