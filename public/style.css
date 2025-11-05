@@ -7,7 +7,7 @@ body {
   height: 100vh;
 }
 
-/* ---------------------------- Screen Management --------------------------- */
+/* Screen Management */
 
 .screen {
     display: none;
@@ -39,12 +39,12 @@ body {
     position: relative;
 }
 
-/* ------------------------------- Typography ------------------------------- */
+/* Typography */
 
 h1 {
     font-size: 4rem;
     margin-bottom: 2rem;
-    color: #966d6d; /* Copper rose */
+    color: #f5e6d3; /* Copper rose */
     text-shadow: 0 0 20px rgba(245, 230, 211, 0.9), 
                  0 0 40px rgba(218, 185, 140, 0.5),
                  0 0 60px rgba(218, 185, 140, 0.3);
@@ -142,7 +142,7 @@ p {
                  0 0 20px rgba(255, 255, 255, 0.6),
                  0 0 30px rgba(255, 255, 255, 0.3);
 }
-/* ---------------------------- Button Styling ----------------------------- */
+/* Button Styling */
 
 /* Primary buttons */
 .btn-primary {
@@ -225,7 +225,7 @@ button:hover {
     display: none;
 }
 
-/* ----------------------------- Recording State ---------------------------- */
+/* Recording State */
 
 .recording {
     background: #d88;
@@ -233,7 +233,7 @@ button:hover {
     color: white;
 }
 
-/* ------------------------------ p5.js Canvas ------------------------------ */
+/* p5.js Canvas */
 
 canvas {
     display: block;
