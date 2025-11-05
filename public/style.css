@@ -158,8 +158,8 @@ p {
 }
 
 .btn-primary:hover {
-    background: #5a7c65;
-    color: white;
+    background: #ffb3c1;
+    color: #5a7c65;
 }
 
 /* Record button */
@@ -176,8 +176,8 @@ p {
 }
 
 .btn-record:hover {
-    background: #d88;
-    color: white;
+    background: #ffb3c1;
+    color: #5a7c65;
 }
 
 .btn-record.recording {
@@ -212,8 +212,8 @@ button:hover {
 }
 
 .btn-circular:hover {
-    background: #5a7c65;
-    color: white;
+    background: #ffb3c1;
+    color: #5a7c65;
     transform: scale(1.1); /* Slightly enlarge on hover */
 }
 
