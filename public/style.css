@@ -167,7 +167,7 @@ p {
     font-size: 1.2rem;
     padding: 15px 40px;
     margin-top: 2rem;
-    border: 2px solid #2596be;
+    border: 2px solid #997371;
     background: #f5f3ed;
     color: #f5e6d3;
     cursor: pointer;
@@ -196,7 +196,7 @@ button:hover {
     height: 60px;
     padding: 0;
     margin: 0;
-    border: 2px solid #2596be;
+    border: 2px solid #997371;
     border-radius: 50%; /* Makes it circular */
     background: rgba(245, 243, 237, 0.9);
     color: #f5e6d3;
@@ -212,8 +212,8 @@ button:hover {
 }
 
 .btn-circular:hover {
-    background: #ffb3c1;
-    color: #5a7c65;
+    background: #997371;
+    color: #bfa699;
     transform: scale(1.1); /* Slightly enlarge on hover */
 }
 
