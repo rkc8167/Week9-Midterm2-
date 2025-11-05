@@ -149,7 +149,7 @@ p {
     font-size: 1.2rem;
     padding: 15px 40px;
     margin-top: 2rem;
-    border: 2px solid #2596be;
+    border: 2px solid white;
     background: #f5f3ed;
     color: #f5e6d3;
     cursor: pointer;
@@ -158,8 +158,8 @@ p {
 }
 
 .btn-primary:hover {
-    background: #ffb3c1;
-    color: #5a7c65;
+    background: #2596be;
+    color: #f5e6d3;
 }
 
 /* Record button */
