@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 let express = require('express');
 let app = express();
-let PORT = 3000;
+let PORT = process.env.PORT || 3000;
 // use the files on the public folder - my index.html is there
 app.use(express.static('public'));
 // the http thing needs to be a server for socket.io (not sure what this means)
