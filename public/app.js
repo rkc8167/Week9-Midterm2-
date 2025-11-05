@@ -1,12 +1,10 @@
-/* -------------------------------------------------------------------------- */
-/*                         APPLICATION STATE MANAGEMENT                       */
-/* -------------------------------------------------------------------------- */
+/* Managing Webpage Server */
 
 // Current state of the application
 let currentStage = 0; // 0 = infatuation, 1 = crystallization, 2 = deterioration
 let currentQuestionIndex = 0;
 
-// Interview questions organized by stage
+// Interview questions defined by stage
 const interviewData = {
     stages: [
         {
@@ -34,24 +32,20 @@ const interviewData = {
     ]
 };
 
-/* -------------------------------------------------------------------------- */
-/*                              AUDIO VARIABLES                               */
-/* -------------------------------------------------------------------------- */
-let audioContext;
-let analyser;
+/* Audio Variables and Processing */
+let audioContext; //handle audio processing 
+let analyser; //analyze audio data
 let dataArray;
-let isRecording = false;
+let isRecording = false; // flag to check if audio is being recorded 
 
-/* -------------------------------------------------------------------------- */
-/*                          SOCKET.IO SETUP                                   */
-/* -------------------------------------------------------------------------- */
-const socket = io();
+/* Socket.io Setup */
+const socket = io(); //set up socket for real-time communication
 
-// User identification (assigned by server)
+// storing user information 
 let userId = null;
 let userColor = null;
 
-// Listen for color assignment from server
+// listen to assigned color for user 
 socket.on('assignColor', (data) => {
     userId = data.userId;
     userColor = data.color;
@@ -59,7 +53,7 @@ socket.on('assignColor', (data) => {
     console.log('User ID:', userId);
 });
 
-// Listen for pixels from other users
+// listen for pixel data from other users 
 socket.on('pixelBroadcast', (pixelData) => {
     // Add pixel from another user to our display
     allPixelsFromDB.push({
@@ -72,15 +66,13 @@ socket.on('pixelBroadcast', (pixelData) => {
     console.log('Received pixel from another user!');
 });
 
-/* -------------------------------------------------------------------------- */
-/*                          PIXEL PARTICLE SYSTEM                             */
-/* -------------------------------------------------------------------------- */
-let particles = []; // Active particles flying from soundwave
-let settledPixels = []; // Pixels that have settled (local session)
-let allPixelsFromDB = []; // All pixels from ALL users (real-time only)
+/* Pixel Particle System */
+let particles = []; // Array of active particles flying from soundwave
+let settledPixels = []; // Pixels that have settled during this session 
+let allPixelsFromDB = []; // All pixels from ALL users in real-time
 
 // Limits to keep it smooth
-const MAX_PIXELS_PER_USER = 300; // Limit per session
+const MAX_PIXELS_PER_USER = 300; // Limit user pixels per session
 const PARTICLE_SPAWN_RATE = 0.15; // Probability per frame when audio level is high
 let userPixelCount = 0; // Track current user's pixel count
 
@@ -98,7 +90,7 @@ class Particle {
     }
 
     update() {
-        // Move particle
+        // Move particle based on velocity 
         this.x += this.vx;
         this.y += this.vy;
 
@@ -112,22 +104,20 @@ class Particle {
         // Fade over time (slower fade so they travel further before settling)
         this.life -= 0.005;
 
-        // Check if settled (stopped moving much)
+        // Check if settled (stopped moving)
         if (Math.abs(this.vx) < 0.1 && Math.abs(this.vy) < 0.1) {
             this.settled = true;
         }
     }
 
-    display(p) {
+    display(p) { // Draw particle on canvas 
         p.noStroke();
         p.fill(this.color[0], this.color[1], this.color[2], this.life * 255);
         p.circle(this.x, this.y, this.size);
     }
 }
 
-/* -------------------------------------------------------------------------- */
-/*                              INITIALIZATION                                */
-/* -------------------------------------------------------------------------- */
+/* Initialization - Begin Setup */
 
 window.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
@@ -221,9 +211,7 @@ function setupEventListeners() {
     console.log('All event listeners attached');
 }
 
-/* -------------------------------------------------------------------------- */
-/*                            NAVIGATION FUNCTIONS                            */
-/* -------------------------------------------------------------------------- */
+/* Navigation Functions */
 
 function switchScreen(fromScreen, toScreen) {
     // Fade out current screen
@@ -359,9 +347,8 @@ function stopRecording() {
 
     console.log('Recording stopped.');
 }
-/* -------------------------------------------------------------------------- */
-/*                            AUDIO ANALYSIS                                  */
-/* -------------------------------------------------------------------------- */
+
+/* Audio Analysis */
 
 function getAudioLevel() {
     if (!analyser || !isRecording) {
@@ -384,9 +371,7 @@ function getAudioLevel() {
     return Math.min(rms * 5, 1);
 }
 
-/* -------------------------------------------------------------------------- */
-/*                         p5.js GARDEN SKETCH                                */
-/* -------------------------------------------------------------------------- */
+/* p5.js Sketch */
 
 let gardenCanvas;
 let currentBackgroundImage;
