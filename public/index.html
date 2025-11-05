@@ -4,19 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Whispered Love Letter</title>
+    <title>In Between Hearts, Uninterrupted</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <!-- ----------------------------------------------------------------------- -->
-    <!--                             WELCOME SCREEN                              -->
-    <!-- ----------------------------------------------------------------------- -->
+    <!--Introduction Screen- Start Here-->
     <div id="welcomeScreen" class="screen active">
         <div class="content">
-            <h1>Whispered Love Letter</h1>
+            <h1>In Between Hearts, Uninterrupted</h1>
             <div class="instructions">
-                <p>Love can manifest in our lives without us having a say in this.</p>
+                <p>Love can appear in our lives often uninvited.</p>
                 <p>Love can linger and overstay its welcome.</p>
                 <p>Love can fade leaving us to question what the fuzz was all about.</p>
                 <p class="emphasis">Was it love?</p>
@@ -26,24 +24,22 @@
     </div>
     <div id="initialQuestionScreen" class="screen">
         <div class="content">
-            <p>Think of love (or any of its manifestations) in your life.</p>
-            <p>This is a place where you can calm your mind (and heart) through talking about it.</p>
-            <p class="emphasis">This place has no memory. Everything you share here will dissolve and disappear.</p>
-            <button id="toRecordBtn" class="btn-primary">I'll share</button>
+            <p>Think of any manifestations of love in your life.</p>
+            <p>This is a space to quiet your mind and rest your heart.</p>
+            <p class="emphasis">A place with no memory — where everything you choose to share will gently dissolve and disappear.</p>
+            <button id="toRecordBtn" class="btn-primary">Let's begin.</button>
         </div>
     </div>
-    <!-- ----------------------------------------------------------------------- -->
-    <!--                              RECORD PROMPT                              -->
-    <!-- ----------------------------------------------------------------------- -->
+
+    <!--Begin Recording Here-->
     <div id="recordPromptScreen" class="screen">
         <div class="content">
-            <p>The next set of questions can help you discover the nature of those feelings.</p>
+            <p>The following questions are here to help you uncover the nature of your feelings.</p>
             <button id="recordBtn" class="btn-record">Record (never stored)</button>
         </div>
     </div>
-    <!-- ----------------------------------------------------------------------- -->
-    <!--                                QUESTIONS                                -->
-    <!-- ----------------------------------------------------------------------- -->
+    
+    <!--Questions For Three Stages-->
     <div id="questionScreen" class="screen">
         <div class="content" id="stageQuestion">
             <h2 id="stageTitle"></h2>
@@ -53,9 +49,8 @@
             <button id="nextQuestionBtn" class="btn-circular">></button>
         </div>
     </div>
-    <!-- ----------------------------------------------------------------------- -->
-    <!--                                  QUOTE                                  -->
-    <!-- ----------------------------------------------------------------------- -->
+    
+    <!--Closing Screen-->
     <div id="quoteScreen" class="screen">
         <div class="content">
             <blockquote>
@@ -64,30 +59,28 @@
                     dammit, to make her respond! Even though I know that Emily and I have absolutely no chance of making
                     a life together, the thought of her is an obsession. I am in the position of passionately wanting
                     someone I don't want at all and could find no use for if I had her."</p>
-                <cite id="quoteAuthor">- Dorothy Tennov</cite>
+                <cite id="quoteAuthor">- Dorothy Tennov, 1979, Love & Limerence</cite>
             </blockquote>
-            <p id="familiarText">Does this sound familiar? Maybe this description is closer to what you felt.</p>
-            <p id="limerenceText" class="emphasis">If so, you may have experienced limerence.</p>
-            <button id="afterQuoteBtn" class="btn-primary">Oh my!</button>
+            <p id="familiarText">Does this sound familiar? Perhaps this description is closer to what you felt.</p>
+            <p id="limerenceText" class="emphasis">If so, you may have encountered limerence.</p>
+            <button id="afterQuoteBtn" class="btn-primary">Oh my.</button>
         </div>
     </div>
-    <!-- ----------------------------------------------------------------------- -->
-    <!--                            FINAL REFLECTION                             -->
-    <!-- ----------------------------------------------------------------------- -->
+    
+    <!--Closing Page-Final Reflection-->
     <div id="finalScreen" class="screen">
         <div class="content">
-            <p id="finalText">But now that you've had the time to reflect, you can let go of the intensity of those feelings.</p>
-            <p id="finalEmphasis" class="emphasis">Now that you're lighter, you can move on.</p>
-            <button id="startOverBtn" class="btn-primary">Start Over</button>
+            <p id="finalText">But now that you've taken the time to reflect, you can release the intensity of those feelings.</p>
+            <p id="finalEmphasis" class="emphasis">You can breathe again, a little lighter.</p>
+            <button id="startOverBtn" class="btn-primary">Begin anew.</button>
         </div>
     </div>
-    <!-- ----------------------------------------------------------------------- -->
-    <!--                              GARDEN SCREEN                              -->
-    <!-- ----------------------------------------------------------------------- -->
+
+    <!--Garden Screen Display-->
     <div id="gardenScreen">
         <!-- p5.js canvas will be inserted here -->
     </div>
-    <!-- ------------------------------ LIBRARIES ------------------------------ -->
+    <!--Libraries - Socket Integration-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.0/p5.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="app.js"></script>
