@@ -176,7 +176,7 @@ p {
 }
 
 .btn-record:hover {
-    background: #ffb3c1;
+    background: #966d6d;
     color: #5a7c65;
 }
 
@@ -186,7 +186,7 @@ p {
 }
 
 button:hover {
-    background: #5a7c65;
+    background: #966d6d;
     color: white;
 }
 
@@ -212,7 +212,7 @@ button:hover {
 }
 
 .btn-circular:hover {
-    background: #997371;
+    background: #966d6d;
     color: #bfa699;
     transform: scale(1.1); /* Slightly enlarge on hover */
 }
