@@ -499,9 +499,9 @@ function drawSoundwave(p) {
 
      // Color based on stage
     const stageColors = [
-        [180, 140, 200],  // Infatuation - soft purple
-        [150, 100, 180],  // Crystallization - medium purple
-        [120, 70, 160]    // Deterioration - deep purple
+        [184, 115, 101],  // Infatuation - copper rose
+        [170, 105, 92],   // Crystallization - deeper copper rose
+        [198, 125, 110]   // Deterioration - lighter copper rose
     ];
 
     const color = stageColors[currentStage];
