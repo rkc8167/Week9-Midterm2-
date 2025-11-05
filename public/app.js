@@ -3,19 +3,11 @@
 /* -------------------------------------------------------------------------- */
 
 // Current state of the application
-let appState = 'welcome'; // 'welcome', 'question', 'recording', 'garden'
 let currentStage = 0; // 0 = infatuation, 1 = crystallization, 2 = deterioration
 let currentQuestionIndex = 0;
 
 // Interview questions organized by stage
 const interviewData = {
-    intro: [
-        "Do you remember (ever) loving someone?",
-        "How did it start? What was your first impression about this person?",
-        "What would you call that feeling?",
-        "Was it love? What does it mean to love?",
-        "Maybe it was something else?"
-    ],
     stages: [
         {
             name: "Infatuation",
@@ -79,12 +71,6 @@ socket.on('pixelBroadcast', (pixelData) => {
     });
     console.log('Received pixel from another user!');
 });
-
-/* -------------------------------------------------------------------------- */
-/*                            FERTILIZER SYSTEM                               */
-/* -------------------------------------------------------------------------- */
-let fertilizerMarks = []; // Stores all marks (local + from database)
-let backgroundImage; // Garden background
 
 /* -------------------------------------------------------------------------- */
 /*                          PIXEL PARTICLE SYSTEM                             */
@@ -239,25 +225,6 @@ function setupEventListeners() {
 /*                            NAVIGATION FUNCTIONS                            */
 /* -------------------------------------------------------------------------- */
 
-function startInterview() {
-    console.log('Starting interview...');
-
-    // Hide welcome screen, show question and garden screens
-    switchScreen('welcome', 'question');
-
-    // ALSO make garden screen active (it starts hidden!)
-    document.getElementById('gardenScreen').classList.add('active');
-
-    // Initialize the garden/canvas BEFORE loading first question
-    initializeGarden();
-
-    // Load first question
-    loadQuestion();
-
-    // Start the question timer (auto-advance every 10 seconds)
-    startQuestionTimer();
-}
-
 function switchScreen(fromScreen, toScreen) {
     // Fade out current screen
     const fromElement = document.getElementById(fromScreen + 'Screen');
@@ -333,14 +300,6 @@ function changeStageBackground() {
     const newBackground = backgroundKeys[currentStage];
     transitionBackground(newBackground);
     console.log(`Changed to stage: ${currentStage} (${newBackground})`);
-}
-
-function toggleRecording() {
-    if (!isRecording) {
-        startRecording();
-    } else {
-        stopRecording();
-    }
 }
 
 async function startRecording() {
@@ -533,13 +492,6 @@ function transitionBackground(newBackgroundKey) {
 
 // Global object to store background images
 let backgroundImages = {};
-
-// Placeholder functions (we'll implement these next)
-
-function drawFertilizerMarks(p) {
-    // This is now handled by drawAllPixels() in p.draw()
-    // Keeping this for backwards compatibility
-}
 
 function drawSoundwave(p) {
     if (!analyser || !isRecording) return;
