@@ -5,6 +5,7 @@ body {
   color: #3a3a3a;
   overflow-x: hidden;
   height: 100vh;
+  font-family: "Times New Roman", Times, serif; /* Changed to Times New Roman */
 }
 
 /* Screen Management */
